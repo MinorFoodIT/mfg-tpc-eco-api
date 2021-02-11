@@ -1,0 +1,32 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "description": "TPC ECO API",
+      "version": "1.0.0",
+      "title": "TPC ECO API",
+      "termsOfService": "",
+      "contact": {
+        "email": "akarat_su@minor.com"
+      },
+      "license": {
+        "name": "Apache 2.0",
+        "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+    },
+    "host": "tpc-eco-api.minorfoodit.com",
+    "basePath": "/api",
+    "tags": [
+      {
+        "name": "Request",
+        "description": ""
+      }
+    ],
+    "schemes": [
+      "https"
+    ],
+    "paths": {
+          
+          
+        
+    }
+}       
