@@ -1,0 +1,29 @@
+version: '3.7'
+
+services:
+  mfg-tpc-eco-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        DB_HOST: db2
+    container_name: 'tpc-api'
+    hostname: 'tpc-api'
+    restart: 'always' #on-failure
+    networks: # Networks to join (Services on the same network can communicate with each other using their name)
+      - api_network
+      - postgres_network
+    labels:
+      - "traefik.enable=true"
+      # - "traefik.http.routers.mfg-tpc-eco-api.entrypoints=websecure"
+      # - "traefik.http.routers.mfg-tpc-eco-api.rule=Host(`mfg-tpc-eco-api.minorfoodit.com`)"
+      # - "traefik.http.routers.mfg-tpc-eco-api.service=mfg-tpc-eco-api"
+      # - "traefik.http.routers.mfg-tpc-eco-api.tls=true"
+      # - "traefik.http.services.mfg-tpc-eco-api.loadbalancer.server.port=4000"
+      - "traefik.docker.network=api_network"
+
+networks:
+  postgres_network:
+    external: true
+  api_network:
+    external: true
