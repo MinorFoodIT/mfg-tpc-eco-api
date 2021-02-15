@@ -35,12 +35,21 @@ const queryFunc =  (err,client,query,params) => {
     })
 }
 
-
+/*
+* RESULTS
+****************
+"fieldCount": 0,
+"affectedRows": 1,
+"insertId": 2,
+"serverStatus": 2,
+"warningCount": 0,
+"message": "",
+"protocol41": true,
+"changedRows": 0
+*/
 const saveLotto = async(lotto) => {
-
     return new Promise ((resolve, reject) => {
         try{
-            
             pool(async (err, client) => {
                 let params = [lotto.brand,lotto.promotion,lotto.typeCode
                     ,lotto.code,lotto.telephone,lotto.firstName,lotto.lastName

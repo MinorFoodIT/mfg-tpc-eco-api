@@ -41,7 +41,7 @@ router.post("/v1/lotto", asyncMiddleware(async (req, res, next) => {
                     new APIResponse(
                         "Success", 
                         200, 
-                        newLotto, 
+                        {id : newLotto.insertId}, 
                         true
                 ).jsonReturn())
             }else{
