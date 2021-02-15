@@ -8,7 +8,7 @@ const connectionConfig = {
     //charset: 'utf8mb4',
     //timezone : '+07:00',
     connectTimeout: 120000,
-    host     : baseconfig.mysql_host, //'172.17.0.1',
+    host     : '192.178.82.3', //baseconfig.mysql_host, //'172.17.0.1',
     port     : baseconfig.mysql_port,
     user     : baseconfig.mysql_user,
     password : baseconfig.mysql_password,
