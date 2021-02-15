@@ -18,7 +18,7 @@ const connectionConfig = {
     ],
     synchronize: false
 }
-
+console.log(connectionConfig)
 createConnection(connectionConfig)
 .then((connection) => {
     console.log(JSON.stringify(connectionConfig))
