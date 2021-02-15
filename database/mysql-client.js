@@ -3,7 +3,7 @@ var logger = require('./../common/logging/winston')(__filename)
 var baseconfig = require('./../common/config')
 
 var pool = mysql.createPool({
-    connectionLimit : 10,
+    connectionLimit : 500,
     acquireTimeout : 120000,
     conneectionTimeout : 120000,
     host     : baseconfig.mysql_host, //'172.17.0.1',

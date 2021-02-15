@@ -4,7 +4,7 @@ var router = express.Router()
 const fs = require('fs')
 
 const Lotto = require('../../database/model/foodmarketing').Lotto;
-const dbservice = require('./../../database/services/dbservice');
+const dbservice = require('./../../database/dbclient');  //require('./../../database/services/dbservice');
 const helper = require('./../../common/helper')
 const asyncMiddleware = require('../../utils/asyncMiddleWare')
 const APIResponse = require("./../../common/APIResponse")
@@ -33,7 +33,7 @@ router.post("/v1/lotto", asyncMiddleware(async (req, res, next) => {
         lotto.posData = JSON.stringify(req.body)
         lotto.requestID = req.body.requestID
         lotto.posFlag = 'posSaved';
-        let newLotto = await dbservice.saveLotto(lotto)
+        let newLotto =  'unifined'//await dbservice.saveLotto(lotto)
         if(newLotto){
             res.json(
                 new APIResponse(
