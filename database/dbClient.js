@@ -25,25 +25,29 @@ const getLottoByCode = async(lotto) => {
 
     return new Promise ((resolve, reject) => {
         try{
-            pool.getConnection()
-            .then( (client) => {
-                return client.query('SELECT code,storeCode from Lotto where code=$1 and typeCode=$2 ',[lotto.code,lotto.typeCode])
-                        .then( res => {
-                            resolve(res.rows)
-                            client.release();
-                        })
-                        .catch(err => {
-                            resolve({})
-                            client.release();
-                            console.log(err)
-                        })
-                    
+            pool((err, client) => {
+                if(err){
+                    console.log(err)
+                    try{
+                        client.release();
+                        reject(null)
+                    }catch(e){
+                        reject(null)
+                    }
+                }else{
+                    return client.query('SELECT code,storeCode from Lotto where code=$1 and typeCode=$2 ',[lotto.code,lotto.typeCode])
+                    .then( res => {
+                        resolve(res.rows)
+                        client.release();
+                    })
+                    .catch(err => {
+                        resolve({})
+                        client.release();
+                        console.log(err)
+                    })
+                }
+
             })
-            .catch(e =>{
-                reject(null)
-                console.log(e)
-            })
-        
          }
         catch(err){
             reject(null)   
