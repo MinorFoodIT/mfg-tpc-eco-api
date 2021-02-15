@@ -52,7 +52,6 @@ const getLottoByCode = async(lotto) => {
     })
 }
 
-
 module.exports = {
     getLottoByCode
 }

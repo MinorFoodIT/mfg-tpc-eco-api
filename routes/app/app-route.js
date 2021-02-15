@@ -4,7 +4,7 @@ var router = express.Router()
 const fs = require('fs')
 
 const Lotto = require('../../database/model/foodmarketing').Lotto;
-const dbservice = require('./../../database/dbclient');  //require('./../../database/services/dbservice');
+const dbservice = require('./../../database/dbClient');  //require('./../../database/services/dbservice');
 const helper = require('./../../common/helper')
 const asyncMiddleware = require('../../utils/asyncMiddleWare')
 const APIResponse = require("./../../common/APIResponse")
