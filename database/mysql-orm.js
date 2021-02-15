@@ -10,8 +10,8 @@ const connectionConfig = {
     connectTimeout: 120000,
     host     : baseconfig.mysql_host, //'172.17.0.1',
     port     : baseconfig.mysql_port,
-    user     : baseconfig.mysql_user,
-    password : baseconfig.mysql_password,
+    user     : 'root',//baseconfig.mysql_user,
+    password : 'root', //baseconfig.mysql_password,
     database : baseconfig.mysql_database,
     entities: [
         require("./entity/Lotto"),
