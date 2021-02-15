@@ -61,13 +61,13 @@ router.get("/v1/lotto/:typecode/:code", asyncMiddleware(async (req, res, next) =
         let lotto = new Lotto() 
         lotto.code = code
         lotto.typeCode = typecode
-        let lotto = await dbservice.getLottoByCode(lotto)
-        if (lotto) {
+        let findinglotto = await dbservice.getLottoByCode(lotto)
+        if (findinglotto) {
             res.json(
                 new APIResponse(
                     "Success", 
                     200, 
-                    lotto, 
+                    findinglotto, 
                     true 
             ).jsonReturn())
         } else {
