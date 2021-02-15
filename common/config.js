@@ -25,6 +25,11 @@ const config = {
     env: envVars.NODE_ENV,
     port: envVars.PORT,
     jwtSecret: envVars.JWT_SECRET,
+    mysql_host: envVars.mysql_host,
+    mysql_port: envVars.mysql_port,
+    mysql_user: envVars.mysql_user,
+    mysql_password: envVars.mysql_password,
+    mysql_database: envVars.mysql_database,
 
 }
 console.log('[ENVIRONMENT] '+config.env);
