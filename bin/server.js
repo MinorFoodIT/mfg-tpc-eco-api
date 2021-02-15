@@ -8,7 +8,8 @@ var app = require('../app');
 var debug = require('debug')('http:api');
 var http = require('http');
 var logger = require('./../common/logging/winston')(__filename);
-var mysql_orm = require('./../database/mysql-orm');
+//var mysql_orm = require('./../database/mysql-orm');
+var mysql_client = require('./../database/mysql-client');
 //var cacheMongod = require('./../common/cache-mongo');
 
 /**
