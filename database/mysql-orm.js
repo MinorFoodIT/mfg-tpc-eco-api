@@ -7,7 +7,7 @@ const connectionConfig = {
     type: "mysql",
     //charset: 'utf8mb4',
     //timezone : '+07:00',
-    connectTimeout: 120000,
+    //connectTimeout: 120000,
     host     : '192.178.82.3', //baseconfig.mysql_host, //'172.17.0.1',
     port     : baseconfig.mysql_port,
     user     : baseconfig.mysql_user,
@@ -16,7 +16,8 @@ const connectionConfig = {
     entities: [
         require("./entity/Lotto"),
     ],
-    synchronize: false
+    synchronize: false,
+    logging: true
 }
 console.log(connectionConfig)
 createConnection(connectionConfig)
