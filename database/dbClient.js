@@ -35,15 +35,16 @@ const getLottoByCode = async(lotto) => {
                         reject(null)
                     }
                 }else{
-                    return client.query('SELECT code,storeCode from Lotto where code=$1 and typeCode=$2 ',[lotto.code,lotto.typeCode])
-                    .then( res => {
-                        resolve(res.rows)
-                        client.release();
-                    })
-                    .catch(err => {
-                        resolve({})
-                        client.release();
-                        console.log(err)
+                    client.query('SELECT code,storeCode from Lotto where code=$1 and typeCode=$2 ',[lotto.code,lotto.typeCode] , function (error, results, fields){
+                        if(error){
+                            resolve({})
+                            client.release();
+                            console.log(err)
+                        }else{
+                            resolve(results)
+                            client.release();
+                        }
+
                     })
                 }
 
