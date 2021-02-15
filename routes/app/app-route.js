@@ -33,7 +33,7 @@ router.post("/v1/lotto", asyncMiddleware(async (req, res, next) => {
         lotto.posData = JSON.stringify(req.body)
         lotto.requestID = req.body.requestID
         lotto.posFlag = 'posSaved';
-        let newLotto =  'unifined'//await dbservice.saveLotto(lotto)
+        let newLotto =  await dbservice.saveLotto(lotto)
         if(newLotto){
             res.json(
                 new APIResponse(
