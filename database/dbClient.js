@@ -2,25 +2,6 @@ var pool = require('./mysql-client');
 var logger = require('./../common/logging/winston')(__filename);
 var helper = require('./../common/helper');
 
-// const saveLottoByCode = (lotto) => {
-//     pool.getConnection()
-//     .then(client => {
-//         return client.query('INSERT INTO raw_requests (raw_request,json_request) ' +
-//                             ' values( $1 ,$2)', [req,jsonReq])
-//             .then(res => {
-//                 client.release();
-//             })
-//             .catch(e => {
-//                 client.release();
-//                 logger.info('[saveRawRequest] error => '+ e.stack);
-//             })
-//     })
-//     .catch(err => {
-//         logger.info('[Pool connect] error => '+ err.stack);
-//     })
-
-// }
-
 const queryFunc =  (err,client,query,params) => {
     return new Promise ((resolve, reject) => {
         if(err){
@@ -52,7 +33,32 @@ const queryFunc =  (err,client,query,params) => {
         }
 
     })
-    
+}
+
+
+const saveLottoByCode = async(lotto) => {
+
+    return new Promise ((resolve, reject) => {
+        try{
+            
+            pool(async (err, client) => {
+                let params = [lotto.brand,lotto.promotion,lotto.typeCode
+                    ,lotto.code,lotto.telephone,lotto.firstName,lotto.lastName
+                    ,lotto.storeCode,lotto.posDate,lotto.posData,lotto.requestID,lotto.posFlag] 
+                let sql_query = 'INSERT INTO lotto(brand,promotion,typeCode,code,telephone,firstName,lastName,storeCode,posDate,posData,requestID,posFlag) values(?,?,?,?,?,?,?,?,?,?,?,?) '
+                logger.info('[SQL] '+sql_query)
+                console.log(params)
+                let results = await queryFunc(err,client,sql_query,params)
+                resolve(results)
+            })
+         }
+        catch(err){
+            reject(null)   
+            console.log(err)
+        }
+
+
+    });
 }
 
 const getLottoByCode = async(lotto) => {
@@ -60,33 +66,12 @@ const getLottoByCode = async(lotto) => {
     return new Promise ((resolve, reject) => {
         try{
             let params = [lotto.code,lotto.typeCode] 
-            console.log(params)
             pool(async (err, client) => {
                 let sql_query = 'SELECT code,storeCode from lotto where code=? and typeCode=? '
+                logger.info('[SQL] '+sql_query)
+                console.log(params)
                 let results = await queryFunc(err,client,sql_query,params)
                 resolve(results)
-                // if(err){
-                //     console.log(err)
-                //     try{
-                //         client.release();
-                //         reject(null)
-                //     }catch(e){
-                //         reject(null)
-                //     }
-                // }else{
-                //     client.query('SELECT code,storeCode from lotto where code=? and typeCode=? ',params, function (error, results, fields){
-                //         if(error){
-                //             console.log(error)
-                //             resolve({})
-                //             client.release();
-                //         }else{
-                //             resolve(results)
-                //             client.release();
-                //         }
-
-                //     })
-                // }
-
             })
          }
         catch(err){
@@ -97,5 +82,6 @@ const getLottoByCode = async(lotto) => {
 }
 
 module.exports = {
-    getLottoByCode
+    getLottoByCode,
+    saveLottoByCode
 }
