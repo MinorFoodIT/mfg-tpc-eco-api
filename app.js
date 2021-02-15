@@ -56,8 +56,8 @@ app.get('/health-check', (req, res) => {
 );
 
 // Router 
-// var apiRoutes = require('./routes/api-route');
-// app.use('/api', apiRoutes);
+var apiRoutes = require('./routes/app/app-route');
+app.use('/api', apiRoutes);
 
 
 // if error is not an instanceOf APIError, convert it.
