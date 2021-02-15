@@ -5,13 +5,13 @@ const moment = require('moment');
 
 const connectionConfig = {
     type: "mysql",
-    charset: 'utf8mb4',
+    //charset: 'utf8mb4',
     //timezone : '+07:00',
     connectTimeout: 120000,
     host     : baseconfig.mysql_host, //'172.17.0.1',
     port     : baseconfig.mysql_port,
-    user     : 'root',//baseconfig.mysql_user,
-    password : 'root', //baseconfig.mysql_password,
+    user     : baseconfig.mysql_user,
+    password : baseconfig.mysql_password,
     database : baseconfig.mysql_database,
     entities: [
         require("./entity/Lotto"),
@@ -27,6 +27,6 @@ createConnection(connectionConfig)
         console.log('[ORM]'+'TableName = '+ entity.tableName +', name = '+entity.name); 
         //propertiesMap:
     })
-})
+}).catch(error => console.log(error));
 
 module.exports = {};
