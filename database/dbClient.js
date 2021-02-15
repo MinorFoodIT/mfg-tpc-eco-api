@@ -61,7 +61,7 @@ const getLottoByCode = async(lotto) => {
         try{
             let params = [lotto.code,lotto.typeCode] 
             console.log(params)
-            pool((err, client) => {
+            pool(async (err, client) => {
                 let sql_query = 'SELECT code,storeCode from lotto where code=? and typeCode=? '
                 let results = await queryFunc(err,client,sql_query,params)
                 resolve(results)
