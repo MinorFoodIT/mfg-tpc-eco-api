@@ -25,6 +25,8 @@ const getLottoByCode = async(lotto) => {
 
     return new Promise ((resolve, reject) => {
         try{
+            let params = [lotto.code,lotto.typeCode] 
+            console.log(params)
             pool((err, client) => {
                 if(err){
                     console.log(err)
@@ -35,11 +37,11 @@ const getLottoByCode = async(lotto) => {
                         reject(null)
                     }
                 }else{
-                    client.query('SELECT code,storeCode from Lotto where code=$1 and typeCode=$2 ',[lotto.code,lotto.typeCode] , function (error, results, fields){
+                    client.query('SELECT code,storeCode from lotto where code=$1 and typeCode=$2 ',params, function (error, results, fields){
                         if(error){
+                            console.log(error)
                             resolve({})
                             client.release();
-                            console.log(err)
                         }else{
                             resolve(results)
                             client.release();
