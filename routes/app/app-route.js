@@ -33,19 +33,24 @@ router.post("/v1/lotto", asyncMiddleware(async (req, res, next) => {
         lotto.posData = JSON.stringify(req.body)
         lotto.requestID = req.body.requestID
         lotto.posFlag = 'posSaved';
-        let newLotto =  await dbservice.saveLotto(lotto)
-        if(newLotto){
-            res.json(
-                new APIResponse(
-                    "Success", 
-                    200, 
-                    newLotto, 
-                    true
-            ).jsonReturn())
+        let findinglotto = await dbservice.getLottoByCode(lotto)
+        if(helper.isNullEmptry(findinglotto)) {
+            let newLotto =  await dbservice.saveLotto(lotto)
+            if(newLotto){
+                res.json(
+                    new APIResponse(
+                        "Success", 
+                        200, 
+                        newLotto, 
+                        true
+                ).jsonReturn())
+            }else{
+                //Did not success
+                responseError(res, "Code is error", 500, true)
+            } 
         }else{
-            //Did not success
-            responseError(res, "Code is error", 500, true)
-        } 
+            responseError(res, "Code is duplicated", 500, true)
+        }
     }else{
         //Authen is invalid
         responseError(res, "Client_id is invalid", 403, true)

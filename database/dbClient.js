@@ -36,7 +36,7 @@ const queryFunc =  (err,client,query,params) => {
 }
 
 
-const saveLottoByCode = async(lotto) => {
+const saveLotto = async(lotto) => {
 
     return new Promise ((resolve, reject) => {
         try{
@@ -83,5 +83,5 @@ const getLottoByCode = async(lotto) => {
 
 module.exports = {
     getLottoByCode,
-    saveLottoByCode
+    saveLotto
 }
