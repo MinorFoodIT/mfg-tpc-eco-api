@@ -54,30 +54,34 @@ router.post("/v1/lotto", asyncMiddleware(async (req, res, next) => {
 }))
 
 router.get("/v1/lotto/:typecode/:code", asyncMiddleware(async (req, res, next) => {
-    let client_id = req.headers["client_id"]
-    if(!helper.isNullEmptry(client_id) && client_id === 'minorfoodit'){
-        let typecode = req.params.typecode;
-        let code = req.params.code;
-        let lotto = new Lotto() 
-        lotto.code = code
-        lotto.typeCode = typecode
-        let findinglotto = await dbservice.getLottoByCode(lotto)
-        if (findinglotto) {
-            res.json(
-                new APIResponse(
-                    "Success", 
-                    200, 
-                    findinglotto, 
-                    true 
-            ).jsonReturn())
-        } else {
-            error(res, "Code did not found", 404, true)
+    logger.info("[LOTTO] GET /v1/lotto")
+    try{
+        let client_id = req.headers["client_id"]
+        if(!helper.isNullEmptry(client_id) && client_id === 'minorfoodit'){
+            let typecode = req.params.typecode;
+            let code = req.params.code;
+            let lotto = new Lotto() 
+            lotto.code = code
+            lotto.typeCode = typecode
+            let findinglotto = await dbservice.getLottoByCode(lotto)
+            if (findinglotto) {
+                res.json(
+                    new APIResponse(
+                        "Success", 
+                        200, 
+                        findinglotto, 
+                        true 
+                ).jsonReturn())
+            } else {
+                error(res, "Code did not found", 404, true)
+            }
+        }else{
+            //Authen is invalid
+            responseError(res, "Client_id is invalid", 403, true)
         }
-    }else{
-        //Authen is invalid
-        responseError(res, "Client_id is invalid", 403, true)
+    }catch(err){
+        console.log(err)
     }
-  
 }))
 
 module.exports = router;
