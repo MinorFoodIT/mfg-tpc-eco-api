@@ -112,7 +112,7 @@ const getLottoByCode = async(lotto) => {
         try{
             let params = [lotto.code] 
             pool(async (err, client) => {
-                let sql_query = 'SELECT code,storeCode, date(posDate) ,posFlag from lotto where code=? '
+                let sql_query = 'SELECT code,storeCode, date(posDate) as posDate ,posFlag from lotto where code=? '
                 logger.info('[SQL] '+sql_query)
                 console.log(params)
                 let results = await queryFunc(err,client,sql_query,params)
