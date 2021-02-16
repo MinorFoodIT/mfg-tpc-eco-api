@@ -104,15 +104,15 @@ router.post("/v1/lotto/webregister", asyncMiddleware(async (req, res, next) => {
         //lotto.typeCode = new String(req.body.typeCode).toUpperCase()
         lotto.code = req.body.code
         lotto.telephoneByWeb = req.body.telephone
-        lotto.firstNameByWeb = req.body.firstName
-        lotto.lastNameByWeb  = req.body.lastName
+        lotto.firstNameByWeb = req.body.firstname
+        lotto.lastNameByWeb  = req.body.lastname
         lotto.citizenByWeb   = req.body.citizen
         lotto.emailByWeb     = req.body.email
         lotto.termOfConditionFlag  = req.body.termOfConditionFlag
         lotto.dataAcceptedFlag     = req.body.dataAcceptedFlag
         
         let results = await dbservice.getLottoByCode(lotto)
-        if(helper.isNullEmptry(results)) {
+        if(!helper.isNullEmptry(results)) {
             logger.info('[Results] dbservice.getLottoByCode :')
             console.log(JSON.stringify(results))
             if(Array.isArray(results) && results.length > 0){
@@ -123,7 +123,15 @@ router.post("/v1/lotto/webregister", asyncMiddleware(async (req, res, next) => {
                     console.log(record.posDate +' != '+ moment().format('YYYY-MM-DD') )
                     responseError(res, "Code is invalid of date", 404, true)
                 }else if( record.posFlag === 'posSaved'){
+                    lotto.updatedDate = moment().format('YYYY-MM-DD HH:mm:ss')
                     let newLotto =  await dbservice.updateLottoByWeb(lotto)
+                    res.json(
+                        new APIResponse(
+                            "Success", 
+                            200, 
+                            newLotto, 
+                            true 
+                    ).jsonReturn())
                 }else{
                     responseError(res, "Code is error", 500, true)
                 }
