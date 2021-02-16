@@ -65,13 +65,30 @@ const saveLotto = async(lotto) => {
             reject(null)   
             console.log(err)
         }
-
-
     });
 }
 
-const getLottoByCode = async(lotto) => {
+const updateLottoByWeb = async(lotto) => {
+    return new Promise ((resolve, reject) => {
+        try{
+            pool(async (err, client) => {
+                let params = [lotto.telephoneByWeb,lotto.firstNameByWeb,lotto.lastNameByWeb
+                    ,lotto.citizenByWeb,lotto.emailByWeb, lotto.termOfConditionFlag, lotto.dataAcceptedFlag, lotto.code] 
+                let sql_query = 'UPDATE lotto SET telephoneByWeb=? ,firstNameByWeb=? ,lastNameByWeb=? ,citizenByWeb=? ,emailByWeb=? ,termOfConditionFlag=?, dataAcceptedFlag=? ) where code = ? '
+                logger.info('[SQL] '+sql_query)
+                console.log(params)
+                let results = await queryFunc(err,client,sql_query,params)
+                resolve(results)
+            })
+         }
+        catch(err){
+            reject(null)   
+            console.log(err)
+        }
+    });
+}
 
+const getLottoByCodeAndTypeCode = async(lotto) => {
     return new Promise ((resolve, reject) => {
         try{
             let params = [lotto.code,lotto.typeCode] 
@@ -90,7 +107,28 @@ const getLottoByCode = async(lotto) => {
     })
 }
 
+const getLottoByCode = async(lotto) => {
+    return new Promise ((resolve, reject) => {
+        try{
+            let params = [lotto.code,lotto.typeCode] 
+            pool(async (err, client) => {
+                let sql_query = 'SELECT code,storeCode, date(posDate) ,posFlag from lotto where code=? '
+                logger.info('[SQL] '+sql_query)
+                console.log(params)
+                let results = await queryFunc(err,client,sql_query,params)
+                resolve(results)
+            })
+         }
+        catch(err){
+            reject(null)   
+            console.log(err)
+        }
+    })
+}
+
 module.exports = {
+    getLottoByCodeAndTypeCode,
+    updateLottoByWeb,
     getLottoByCode,
     saveLotto
 }

@@ -61,7 +61,23 @@ module.exports = new EntitySchema({
             type: "varchar",
             nullable: true
         },
+        citizenByWeb: {
+            type: "varchar",
+            nullable: true
+        },
         telephoneByWeb: {
+            type: "varchar",
+            nullable: true
+        },
+        termOfConditionFlag: {
+            type: "varchar",
+            nullable: true
+        },
+        dataAcceptedFlag: {
+            type: "varchar",
+            nullable: true
+        },
+        emailByWeb: {
             type: "varchar",
             nullable: true
         },

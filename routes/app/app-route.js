@@ -9,6 +9,7 @@ const helper = require('./../../common/helper')
 const asyncMiddleware = require('../../utils/asyncMiddleWare')
 const APIResponse = require("./../../common/APIResponse")
 const APIError = require("./../../common/APIError")
+const moment = require('moment')
 
 const responseError = (res, message ,status, isPublic) => {
     res.status(status).json(new APIError(message, status, isPublic).jsonReturn());
@@ -33,7 +34,7 @@ router.post("/v1/lotto", asyncMiddleware(async (req, res, next) => {
         lotto.posData = JSON.stringify(req.body)
         lotto.requestID = req.body.requestID
         lotto.posFlag = 'posSaved';
-        let findinglotto = await dbservice.getLottoByCode(lotto)
+        let findinglotto = await dbservice.getLottoByCodeAndTypeCode(lotto)
         if(helper.isNullEmptry(findinglotto)) {
             let newLotto =  await dbservice.saveLotto(lotto)
             if(newLotto){
@@ -68,7 +69,7 @@ router.get("/v1/lotto/:typecode/:code", asyncMiddleware(async (req, res, next) =
             let lotto = new Lotto() 
             lotto.code = code
             lotto.typeCode = typecode
-            let findinglotto = await dbservice.getLottoByCode(lotto)
+            let findinglotto = await dbservice.getLottoByCodeAndTypeCode(lotto)
             if (findinglotto) {
                 res.json(
                     new APIResponse(
@@ -87,6 +88,57 @@ router.get("/v1/lotto/:typecode/:code", asyncMiddleware(async (req, res, next) =
     }catch(err){
         console.log(err)
     }
+}))
+
+router.post("/v1/lotto/webregister", asyncMiddleware(async (req, res, next) => {
+    logger.info("[LOTTO] POST /v1/lotto/webregister")
+    let client_id = req.headers["client_id"]
+    if(!helper.isNullEmptry(client_id) && client_id === 'minorfoodit'){
+        logger.info("[LOTTO] code "+ req.body.code )
+        logger.info("[LOTTO] firstName "+ req.body.firstName )
+        logger.info("[LOTTO] telephone "+ req.body.telephone )
+        logger.info("[LOTTO] email "+ req.body.email )
+        let lotto = new Lotto() 
+        //lotto.brand = req.body.brand
+        //lotto.promotion = req.body.promotion
+        //lotto.typeCode = new String(req.body.typeCode).toUpperCase()
+        lotto.code = req.body.code
+        lotto.telephoneByWeb = req.body.telephone
+        lotto.firstNameByWeb = req.body.firstName
+        lotto.lastNameByWeb  = req.body.lastName
+        lotto.citizenByWeb   = req.body.citizen
+        lotto.emailByWeb     = req.body.email
+        lotto.termOfConditionFlag  = req.body.termOfConditionFlag
+        lotto.dataAcceptedFlag     = req.body.dataAcceptedFlag
+        
+        let results = await dbservice.getLottoByCode(lotto)
+        if(helper.isNullEmptry(results)) {
+            logger.info('[Results] dbservice.getLottoByCode :')
+            console.log(JSON.stringify(results))
+            if(Array.isArray(results) && results.length > 0){
+                //Exist then save updated from web
+                let record = results[0]
+                if( record.posDate !== moment().format('YYYY-MM-DD') ){
+                    logger.info('[Results] posDate :')
+                    console.log(record.posDate +' != '+ moment().format('YYYY-MM-DD') )
+                    responseError(res, "Code is invalid of date", 404, true)
+                }else if( record.posFlag === 'posSaved'){
+                    let newLotto =  await dbservice.updateLottoByWeb(lotto)
+                }else{
+                    responseError(res, "Code is error", 500, true)
+                }
+
+            }else{
+                responseError(res, "Code is invalid", 404, true)
+            }
+        }else{
+            responseError(res, "Code is error", 500, true)
+        }
+    }else{
+        //Authen is invalid
+        responseError(res, "Client_id is invalid", 403, true)
+    }
+
 }))
 
 module.exports = router;

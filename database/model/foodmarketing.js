@@ -3,7 +3,7 @@ const helper = require('./../../common/helper');
 
 class Lotto {
     constructor(id, brand, promotion, typeCode, code, telephone, firstName, lastName, storeCode, posDate, posData, requestID, firstNameByWeb, lastNameByWeb,
-        telephoneByWeb, posFlag, lottoFlag, reportFlag, createdDate, updatedDate) {
+        citizenByWeb ,telephoneByWeb, emailByWeb, termOfConditionFlag, dataAcceptedFlag, posFlag, lottoFlag, reportFlag, createdDate, updatedDate) {
         this.id = id;
         this.brand = brand;
         this.promotion = promotion;
@@ -18,7 +18,11 @@ class Lotto {
         this.requestID = requestID;
         this.firstNameByWeb = firstNameByWeb;
         this.lastNameByWeb = lastNameByWeb;
+        this.citizenByWeb = citizenByWeb;
         this.telephoneByWeb = telephoneByWeb;
+        this.termOfConditionFlag = termOfConditionFlag;
+        this.dataAcceptedFlag = dataAcceptedFlag;
+        this.emailByWeb = emailByWeb;
         this.posFlag = posFlag;
         this.lottoFlag = lottoFlag;
         this.reportFlag = reportFlag;
