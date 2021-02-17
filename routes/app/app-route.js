@@ -125,9 +125,9 @@ router.post("/v1/lotto/webregister", asyncMiddleware(async (req, res, next) => {
                     logger.info('[Results] posDate :')
                     console.log(record.posDate +' != '+ moment().format('YYYY-MM-DD') )
                     responseError(res, "Code is invalid of date", 404, true)
-                }else if( record.posFlag === 'posSaved' && record.lottoFlag === 'Registerd'){
+                }else if( record.posFlag === 'posSaved' && record.lottoFlag === 'Registered'){
                     responseError(res, "Code was registered", 404, true)
-                }else if( record.posFlag === 'posSaved' && record.lottoFlag !== 'Registerd'){
+                }else if( record.posFlag === 'posSaved' && record.lottoFlag !== 'Registered'){
                     lotto.updatedDate = moment().format('YYYY-MM-DD HH:mm:ss')
                     let newLotto =  await dbservice.updateLottoByWeb(lotto)
                     res.json(
