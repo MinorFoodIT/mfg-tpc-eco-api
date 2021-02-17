@@ -38,7 +38,7 @@ router.post("/v1/lotto", asyncMiddleware(async (req, res, next) => {
         if(helper.isNullEmptry(findinglotto)) {
             let newLotto =  await dbservice.saveLotto(lotto)
             if(newLotto){
-                res.json(
+                res.status(200).json(
                     new APIResponse(
                         "Success", 
                         200, 
@@ -130,7 +130,7 @@ router.post("/v1/lotto/webregister", asyncMiddleware(async (req, res, next) => {
                 }else if( record.posFlag === 'posSaved' && record.lottoFlag !== 'Registered'){
                     lotto.updatedDate = moment().format('YYYY-MM-DD HH:mm:ss')
                     let newLotto =  await dbservice.updateLottoByWeb(lotto)
-                    res.json(
+                    res.status(200).json(
                         new APIResponse(
                             "Success", 
                             200, 

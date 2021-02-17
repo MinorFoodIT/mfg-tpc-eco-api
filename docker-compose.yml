@@ -15,7 +15,7 @@ services:
       - postgres_network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.mfg-tpc-eco-api.entrypoints=websecure"
+      - "traefik.http.routers.mfg-tpc-eco-api.entrypoints=websecure,web"
       - "traefik.http.routers.mfg-tpc-eco-api.rule=Host(`tpc-api.minorfoodit.com`)"
       - "traefik.http.routers.mfg-tpc-eco-api.service=mfg-tpc-eco-api"
       - "traefik.http.routers.mfg-tpc-eco-api.tls=true"
