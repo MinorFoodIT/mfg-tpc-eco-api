@@ -74,7 +74,7 @@ const updateLottoByWeb = async(lotto) => {
             pool(async (err, client) => {
                 let params = [lotto.telephoneByWeb,lotto.firstNameByWeb,lotto.lastNameByWeb
                     ,lotto.citizenByWeb,lotto.emailByWeb, lotto.termOfConditionFlag, lotto.dataAcceptedFlag, lotto.updatedDate, lotto.code] 
-                let sql_query = 'UPDATE lotto SET telephoneByWeb=? ,firstNameByWeb=? ,lastNameByWeb=? ,citizenByWeb=? ,emailByWeb=? ,termOfConditionFlag=?, dataAcceptedFlag=? ,updatedDate=? where code = ? '
+                let sql_query = "UPDATE lotto SET telephoneByWeb=? ,firstNameByWeb=? ,lastNameByWeb=? ,citizenByWeb=? ,emailByWeb=? ,termOfConditionFlag=?, dataAcceptedFlag=? ,updatedDate=? ,lottoFlag='Registered'  where code = ? "
                 logger.info('[SQL] '+sql_query)
                 console.log(params)
                 let results = await queryFunc(err,client,sql_query,params)
@@ -112,7 +112,7 @@ const getLottoByCode = async(lotto) => {
         try{
             let params = [lotto.code] 
             pool(async (err, client) => {
-                let sql_query = "SELECT code,storeCode, DATE_FORMAT(posDate,'%Y-%m-%d') as posDate ,posDate as getDate ,posFlag from lotto where code=? "
+                let sql_query = "SELECT code,storeCode, DATE_FORMAT(posDate,'%Y-%m-%d') as posDate ,posDate as getDate ,posFlag,lottoFlag from lotto where code=? "
                 logger.info('[SQL] '+sql_query)
                 console.log(params)
                 let results = await queryFunc(err,client,sql_query,params)
