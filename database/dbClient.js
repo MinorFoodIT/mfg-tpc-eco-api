@@ -74,7 +74,7 @@ const updateLottoByWeb = async(lotto) => {
             pool(async (err, client) => {
                 let params = [lotto.telephoneByWeb,lotto.firstNameByWeb,lotto.lastNameByWeb
                     ,lotto.citizenByWeb,lotto.emailByWeb, lotto.termOfConditionFlag, lotto.dataAcceptedFlag, lotto.updatedDate, lotto.code] 
-                let sql_query = 'UPDATE lotto SET telephoneByWeb=? ,firstNameByWeb=? ,lastNameByWeb=? ,citizenByWeb=? ,emailByWeb=? ,termOfConditionFlag=?, dataAcceptedFlag=? ,updatedDate=?) where code = ? '
+                let sql_query = 'UPDATE lotto SET telephoneByWeb=? ,firstNameByWeb=? ,lastNameByWeb=? ,citizenByWeb=? ,emailByWeb=? ,termOfConditionFlag=?, dataAcceptedFlag=? ,updatedDate=? where code = ? '
                 logger.info('[SQL] '+sql_query)
                 console.log(params)
                 let results = await queryFunc(err,client,sql_query,params)

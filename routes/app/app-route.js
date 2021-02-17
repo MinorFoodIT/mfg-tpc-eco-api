@@ -110,8 +110,8 @@ router.post("/v1/lotto/webregister", asyncMiddleware(async (req, res, next) => {
         lotto.emailByWeb     = req.body.email
         lotto.termOfConditionFlag  = req.body.termOfConditionFlag
         lotto.dataAcceptedFlag     = req.body.dataAcceptedFlag
-        let timezone = await dbservice.getSystemTimezone()
-        console.log(JSON.stringify(timezone))
+        // let timezone = await dbservice.getSystemTimezone()
+        // console.log(JSON.stringify(timezone))
             
         let results = await dbservice.getLottoByCode(lotto)
         if(!helper.isNullEmptry(results)) {
