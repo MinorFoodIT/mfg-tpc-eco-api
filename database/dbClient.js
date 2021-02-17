@@ -112,7 +112,27 @@ const getLottoByCode = async(lotto) => {
         try{
             let params = [lotto.code] 
             pool(async (err, client) => {
-                let sql_query = 'SELECT code,storeCode, date(posDate) as posDate ,posFlag from lotto where code=? '
+                let sql_query = "SELECT code,storeCode, DATE_FORMAT(posDate,'%Y-%m-%d') as posDate ,posDate as getDate ,posFlag from lotto where code=? "
+                logger.info('[SQL] '+sql_query)
+                console.log(params)
+                let results = await queryFunc(err,client,sql_query,params)
+                resolve(results)
+            })
+         }
+        catch(err){
+            reject(null)   
+            console.log(err)
+        }
+    })
+}
+
+//select timediff(now(),convert_tz(now(),@@session.time_zone,'+00:00'));
+const getSystemTimezone = async() => {
+    return new Promise ((resolve, reject) => {
+        try{
+            let params = [] 
+            pool(async (err, client) => {
+                let sql_query = "select timediff(now(),convert_tz(now(),@@session.time_zone,'+00:00')) "
                 logger.info('[SQL] '+sql_query)
                 console.log(params)
                 let results = await queryFunc(err,client,sql_query,params)
@@ -127,6 +147,7 @@ const getLottoByCode = async(lotto) => {
 }
 
 module.exports = {
+    getSystemTimezone,
     getLottoByCodeAndTypeCode,
     updateLottoByWeb,
     getLottoByCode,

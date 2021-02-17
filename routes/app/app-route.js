@@ -110,7 +110,9 @@ router.post("/v1/lotto/webregister", asyncMiddleware(async (req, res, next) => {
         lotto.emailByWeb     = req.body.email
         lotto.termOfConditionFlag  = req.body.termOfConditionFlag
         lotto.dataAcceptedFlag     = req.body.dataAcceptedFlag
-        
+        let timezone = await dbservice.getSystemTimezone()
+        console.log(JSON.stringify(timezone))
+            
         let results = await dbservice.getLottoByCode(lotto)
         if(!helper.isNullEmptry(results)) {
             logger.info('[Results] dbservice.getLottoByCode :')
@@ -119,6 +121,8 @@ router.post("/v1/lotto/webregister", asyncMiddleware(async (req, res, next) => {
                 //Exist then save updated from web
                 let record = results[0]
                 if( record.posDate !== moment().format('YYYY-MM-DD') ){
+                    logger.info('[MOMENT] current :' +moment().format('YYYY-MM-DD HH:mm:ss'))
+                    
                     logger.info('[Results] posDate :')
                     console.log(record.posDate +' != '+ moment().format('YYYY-MM-DD') )
                     responseError(res, "Code is invalid of date", 404, true)
