@@ -180,7 +180,7 @@ const getReportLotto = async(duration) => {
                 "emailByWeb as Email," +
                 "code as Code_No," +
                 "termOfConditionFlag as Consent" +
-                "from lotto" +
+                "from lotto " +
                 "where lottoFlag = 'Registered' " +
                 ((duration === 'weekly')?
                 "and (DATE_FORMAT(updatedDate,'%Y-%m-%d') >= subdate(current_date, ?)) " 
