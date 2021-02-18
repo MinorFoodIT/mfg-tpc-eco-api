@@ -179,7 +179,7 @@ const getReportLotto = async(duration) => {
                 "citizenByWeb as Citizen_ID," +
                 "emailByWeb as Email," +
                 "code as Code_No," +
-                "termOfConditionFlag as Consent" +
+                "termOfConditionFlag as Consent " +
                 "from lotto " +
                 "where lottoFlag = 'Registered' " +
                 ((duration === 'weekly')?
