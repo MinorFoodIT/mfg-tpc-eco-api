@@ -146,10 +146,66 @@ const getSystemTimezone = async() => {
     })
 }
 
+const getBrandMail = async(brand) => {
+    return new Promise ((resolve, reject) => {
+        try{
+            let params = [lotto.code] 
+            pool(async (err, client) => {
+                let sql_query = "SELECT mail from mail where brand=? "
+                logger.info('[SQL] '+sql_query)
+                console.log(params)
+                let results = await queryFunc(err,client,sql_query,params)
+                resolve(results)
+            })
+         }
+        catch(err){
+            reject(null)   
+            console.log(err)
+        }
+    })
+}
+
+const getReportLotto = async(duration) => {
+    return new Promise ((resolve, reject) => {
+        try{
+            let subdate = (duration === 'weekly')?8:1
+            let params = [subdate] 
+            pool(async (err, client) => {
+                let sql_query = "select DATE_FORMAT(updatedDate,'%d/%m/%Y') as Registed_Date," /
+                "DATE_FORMAT(updatedDate,'%r') as Registered_Time," /
+                "firstNameByWeb as First_Name," /
+                "lastNameByWeb as Last_Name," /
+                "telephoneByWeb as Mobile_No," /
+                "citizenByWeb as Citizen_ID," /
+                "emailByWeb as Email," /
+                "code as Code_No," /
+                "termOfConditionFlag as Consent" /
+                "from lotto" /
+                "where lottoFlag = 'Registered' " /
+                (duration === 'weekly')?
+                "and (DATE_FORMAT(updatedDate,'%Y-%m-%d') >= subdate(current_date, ?)) " 
+                :
+                "and (DATE_FORMAT(updatedDate,'%Y-%m-%d') = subdate(current_date, ?)) " /
+
+                logger.info('[SQL] '+sql_query)
+                console.log(params)
+                let results = await queryFunc(err,client,sql_query,params)
+                resolve(results)
+            })
+         }
+        catch(err){
+            reject(null)   
+            console.log(err)
+        }
+    })
+}
+
 module.exports = {
     getSystemTimezone,
     getLottoByCodeAndTypeCode,
     updateLottoByWeb,
     getLottoByCode,
-    saveLotto
+    saveLotto,
+    getReportLotto,
+    getBrandMail
 }

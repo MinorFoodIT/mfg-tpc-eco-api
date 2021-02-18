@@ -10,6 +10,7 @@ const asyncMiddleware = require('../../utils/asyncMiddleWare')
 const APIResponse = require("./../../common/APIResponse")
 const APIError = require("./../../common/APIError")
 const moment = require('moment')
+const nodemailer = require('nodemailer');
 
 const responseError = (res, message ,status, isPublic) => {
     res.status(status).json(new APIError(message, status, isPublic).jsonReturn());
@@ -188,5 +189,77 @@ router.post("/v1/lotto/webregister", asyncMiddleware(async (req, res, next) => {
     }
 
 }))
+
+router.post('/v1/report/lotto' ,async(req, res) => {
+    logger.info("[REPORT] POST /v1/report/lotto")
+    try {
+        let body = req.body;
+        let duration = body.duration
+        logger.info("[REPORT] "+duration)
+
+        let concept = await dbservice.getBrandMail(body.site_group);
+        let mails = String(concept.mail).split(";");
+
+        // let fileName = body.site_group +'_'+ moment().add(-24, 'hours').format('YYYY_MM_DD') +'.xlsx';
+        // let path = process.cwd() + "/public/uploads/" + fileName;
+        // console.log('[REPORT] file to create '+ path);
+
+        let rowData = await dbservice.getReportLotto(duration);
+        // rowData.map(row=>{
+        //     row.order_time =  helper.isNullEmptry(row.order_time)?"":moment.tz(row.order_time, 'Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss');
+        //     return row;  
+        //   })
+        logger.info('[REPORT] data tranform size = '+rowData.length);
+
+        let workbook = XLSX.utils.book_new();
+        let worksheet = XLSX.utils.json_to_sheet(rowData);
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'DataExport');
+        let attachedData = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx', bookSST: false });
+
+        //XLSX.writeFile(wb, path);  // `${__dirname}/upload-folder/dramaticpenguin.MOV`; //res.download(path); // Set disposition and send it.
+        console.log('[REPORT] buffer created ');
+        // config สำหรับของ gmail
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+            user: 'minorfoodit@gmail.com', // your email
+            pass: 'hhjewtsulknpxvrh' // your email password
+            }
+        });
+
+        let p_regards = '<p>Please do not reply back this mail. If you have any concern please contact Minor Food IT - Brand Partner.</p>' +
+        '<p>Thanks and Regards,</p>' +
+        '<p>Grab API Administrator&nbsp;&nbsp;</p><p>&nbsp;</p>';
+
+        let mailOptions = {
+            from: 'minorfoodit@gmail.com',        // sender
+            to: mails, //'akarat_su@minor.com',   // list of receivers
+            cc: ['akarat_su@minor.com'],
+            subject: '[LuckyDraw] Registerd data to export of '+ moment().add(-24, 'hours').format('YYYY_MM_DD') +' ',              // Mail subject
+            attachments: [ { //file on disk as an attachment
+                filename: fileName,
+                content: attachedData //path // stream this file
+            }],
+            html: p_regards   //HTML body
+        };
+        
+        transporter.sendMail(mailOptions, function (err, info) {
+            if(err)
+              console.log(err)
+            else
+              console.log(info);
+         });
+
+        res.status(200).json({
+            message: "Data to export is done",
+          });
+
+    }catch (error) {
+        console.log(error);
+        res.status(500).send({
+          message: "Could not send report",
+        });
+      }
+})
 
 module.exports = router;
