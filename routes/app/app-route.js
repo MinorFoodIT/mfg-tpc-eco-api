@@ -201,9 +201,9 @@ router.post('/v1/report/lotto' ,async(req, res) => {
         let concept = await dbservice.getBrandMail(body.site_group);
         let mails = String(concept.mail).split(";");
 
-        // let fileName = body.site_group +'_'+ moment().add(-24, 'hours').format('YYYY_MM_DD') +'.xlsx';
-        // let path = process.cwd() + "/public/uploads/" + fileName;
-        // console.log('[REPORT] file to create '+ path);
+        let fileName = duration+'_'+'lucky_draw'+'_'+ moment().add(-24, 'hours').format('YYYY_MM_DD') +'.xlsx';
+        let path = process.cwd() + "/public/uploads/" + fileName;
+        console.log('[REPORT] file to create '+ path);
 
         let rowData = await dbservice.getReportLotto(duration);
         // rowData.map(row=>{
