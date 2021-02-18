@@ -149,7 +149,7 @@ const getSystemTimezone = async() => {
 const getBrandMail = async(brand) => {
     return new Promise ((resolve, reject) => {
         try{
-            let params = [lotto.code] 
+            let params = [brand] 
             pool(async (err, client) => {
                 let sql_query = "SELECT mail from mail where brand=? "
                 logger.info('[SQL] '+sql_query)
