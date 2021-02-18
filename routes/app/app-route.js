@@ -124,9 +124,23 @@ router.post("/v1/lotto/webregister", asyncMiddleware(async (req, res, next) => {
                     logger.info('[MOMENT] current :' +moment().format('YYYY-MM-DD HH:mm:ss'))
                     logger.info('[Results] posDate :')
                     console.log(record.posDate +' != '+ moment().format('YYYY-MM-DD') )
-                    responseError(res, "Code is invalid of date", 404, true)
+                    //responseError(res, "Code is invalid of date", 404, true)
+                    res.status(200).json(
+                        new APIResponse(
+                            "Code is invalid of date", 
+                            404, 
+                            {}, 
+                            true 
+                    ).jsonReturn())
                 }else if( record.posFlag === 'posSaved' && record.lottoFlag === 'Registered'){
-                    responseError(res, "Code was registered", 404, true)
+                    //responseError(res, "Code was registered", 404, true)
+                    res.status(200).json(
+                        new APIResponse(
+                            "Code was registered", 
+                            404, 
+                            {}, 
+                            true 
+                    ).jsonReturn())
                 }else if( record.posFlag === 'posSaved' && record.lottoFlag !== 'Registered'){
                     lotto.updatedDate = moment().format('YYYY-MM-DD HH:mm:ss')
                     let newLotto =  await dbservice.updateLottoByWeb(lotto)
@@ -138,14 +152,35 @@ router.post("/v1/lotto/webregister", asyncMiddleware(async (req, res, next) => {
                             true 
                     ).jsonReturn())
                 }else{
-                    responseError(res, "Code is error", 500, true)
+                    //responseError(res, "Code is error", 500, true)
+                    res.status(200).json(
+                        new APIResponse(
+                            "Code is error", 
+                            500, 
+                            {}, 
+                            true 
+                    ).jsonReturn())
                 }
 
             }else{
-                responseError(res, "Code is invalid", 404, true)
+                //responseError(res, "Code is invalid", 404, true)
+                res.status(200).json(
+                    new APIResponse(
+                        "Code is invalid", 
+                        404, 
+                        {}, 
+                        true 
+                ).jsonReturn())
             }
         }else{
-            responseError(res, "Code is error", 500, true)
+            //responseError(res, "Code is error", 500, true)
+            res.status(200).json(
+                new APIResponse(
+                    "Code is invalid", 
+                    404, 
+                    {}, 
+                    true 
+            ).jsonReturn())
         }
     }else{
         //Authen is invalid
