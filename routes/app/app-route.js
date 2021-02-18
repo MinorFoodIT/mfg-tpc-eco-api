@@ -2,6 +2,7 @@ var express = require("express")
 var logger = require("./../../common/logging/winston")(__filename)
 var router = express.Router()
 const fs = require('fs')
+const XLSX = require("xlsx");
 
 const Lotto = require('../../database/model/foodmarketing').Lotto;
 const dbservice = require('./../../database/dbClient');  //require('./../../database/services/dbservice');
